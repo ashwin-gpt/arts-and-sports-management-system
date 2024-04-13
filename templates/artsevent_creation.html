@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Arts Event Creation</title>
+    <link rel="icon" href="/static/aisat.jpg">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #fff;
+        }
+        h1 {
+            text-align: center;
+        }
+        form {
+            margin-top: 30px;
+            text-align: center;
+        }
+        label {
+            font-size: 1.2rem;
+            display: block;
+            margin-bottom: 10px;
+        }
+        input[type="text"],
+        input[type="date"],
+        input[type="time"],
+        select,
+        button {
+            width: 300px;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 1rem;
+            box-sizing: border-box;
+        }
+        button {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Arts Event Creation</h1>
+        <form action="/artsevent_creation" method="post">
+            <label for="category">Category:</label>
+            <select id="category" name="category" onchange="updateEventNames()">
+                <option value="Literary">Literary</option>
+                <option value="Music">Music</option>
+                <option value="Dance">Dance</option>
+                <option value="Fine Arts">Fine Arts</option>
+                <option value="Theater">Theater</option>
+            </select>
+
+            <label for="event_name">Event Name:</label>
+            <select id="event_name" name="event_name" required>
+                <!-- Event names will be dynamically populated here -->
+            </select>
+
+            <label for="venue">Venue:</label>
+            <select id="venue" name="venue" required>
+                <!-- Venues will be dynamically populated here -->
+            </select>
+
+            <label for="date">Date:</label>
+            <input type="date" id="date" name="event_date" required>
+
+            <label for="time">Time:</label>
+            <input type="time" id="time" name="event_time" required>
+
+            <label for="ampm">AM/PM:</label>
+            <select id="ampm" name="ampm">
+                <option value="AM">AM</option>
+                <option value="PM">PM</option>
+            </select>
+
+            <input type="hidden" name="event_type" value="arts">
+
+            <button type="submit">Schedule Event</button>
+        </form>
+    </div>
+
+    <script>
+        function updateEventNames() {
+            var eventNamesSelect = document.getElementById("event_name");
+            eventNamesSelect.innerHTML = ""; // Clear existing options
+    
+            // AJAX request to fetch event names based on selected category
+            var category = document.getElementById("category").value;
+            var xhr = new XMLHttpRequest();
+            xhr.open("GET", "/get_event_names?category=" + category, true);
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState == 4 && xhr.status == 200) {
+                    var eventNames = JSON.parse(xhr.responseText);
+                    eventNames.forEach(function(eventName) {
+                        var option = document.createElement("option");
+                        option.text = eventName;
+                        eventNamesSelect.add(option);
+                    });
+                }
+            };
+            xhr.send();
+    
+            // AJAX request to fetch all venues
+            var venuesSelect = document.getElementById("venue");
+            venuesSelect.innerHTML = ""; // Clear existing options
+            var xhr2 = new XMLHttpRequest();
+            xhr2.open("GET", "/get_all_arts_venues", true); // Adjust the route to fetch all venues
+            xhr2.onreadystatechange = function() {
+                if (xhr2.readyState == 4 && xhr2.status == 200) {
+                    var venues = JSON.parse(xhr2.responseText);
+                    venues.forEach(function(venue) {
+                        var option = document.createElement("option");
+                        option.text = venue;
+                        venuesSelect.add(option);
+                    });
+                }
+            };
+            xhr2.send();
+        }
+    </script>
+    
+</body>
+</html>

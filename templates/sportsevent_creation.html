@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sports Event Creation</title>
+    <link rel="icon" href="/static/aisat.jpg">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #fff;
+        }
+        h1 {
+            text-align: center;
+        }
+        form {
+            margin-top: 30px;
+            text-align: center;
+        }
+        label {
+            font-size: 1.2rem;
+            display: block;
+            margin-bottom: 10px;
+        }
+        input[type="text"],
+        input[type="date"],
+        input[type="time"],
+        select,
+        button {
+            width: 300px;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 1rem;
+            box-sizing: border-box;
+        }
+        button {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Sports Event Creation</h1>
+        <form action="/sportsevent_creation" method="post">
+            <label for="event_type">Event Type:</label>
+            <select id="event_type" name="event_type" required onchange="updateEventNames()">
+                <option value="Solo">Solo</option>
+                <option value="Group">Group</option>
+            </select>
+
+            <label for="event_name">Event Name:</label>
+            <select id="event_name" name="event_name" required>
+                <!-- Event names will be dynamically populated here -->
+            </select>
+
+            <label for="venue">Venue:</label>
+            <select id="venue" name="venue" required>
+                <!-- Venues will be dynamically populated here -->
+            </select>
+
+            <label for="date">Date:</label>
+            <input type="date" id="date" name="event_date" required>
+
+            <label for="time">Time:</label>
+            <input type="time" id="time" name="event_time" required>
+
+            <label for="ampm">AM/PM:</label>
+            <select id="ampm" name="ampm">
+                <option value="AM">AM</option>
+                <option value="PM">PM</option>
+            </select>
+
+            <button type="submit">Schedule Event</button>
+        </form>
+    </div>
+
+    <script>
+        // Function to fetch event names based on event type and populate the dropdown
+        function updateEventNames() {
+            var eventTypeSelect = document.getElementById("event_type");
+            var eventNameSelect = document.getElementById("event_name");
+            eventNameSelect.innerHTML = ""; // Clear existing options
+
+            // AJAX request to fetch event names based on event type
+            var xhr = new XMLHttpRequest();
+            xhr.open("POST", "/get_events", true);
+            xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState == 4 && xhr.status == 200) {
+                    var eventNames = JSON.parse(xhr.responseText);
+                    eventNames.forEach(function(eventName) {
+                        var option = document.createElement("option");
+                        option.text = eventName;
+                        eventNameSelect.add(option);
+                    });
+                }
+            };
+            xhr.send("event_type=" + eventTypeSelect.value);
+        }
+
+        // Function to fetch sports venues and populate the dropdown
+        function updateVenues() {
+            var venueSelect = document.getElementById("venue");
+            venueSelect.innerHTML = ""; // Clear existing options
+
+            // AJAX request to fetch sports venues
+            var xhr = new XMLHttpRequest();
+            xhr.open("GET", "/get_all_sports_venues", true);
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState == 4 && xhr.status == 200) {
+                    var venues = JSON.parse(xhr.responseText);
+                    venues.forEach(function(venue) {
+                        var option = document.createElement("option");
+                        option.text = venue;
+                        venueSelect.add(option);
+                    });
+                }
+            };
+            xhr.send();
+        }
+
+        // Call the function to populate event names when the page loads
+        window.onload = function() {
+            updateEventNames();
+            updateVenues();
+        };
+    </script>
+</body>
+</html>

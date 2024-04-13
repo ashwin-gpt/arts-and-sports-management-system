@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Login</title>
+    <link rel="icon" href="/static/aisat.jpg">
+    <style>
+        /* Global styles */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-image: url('/static/admin1.gif'); /* Background image URL */
+            background-size: cover; /* Cover the entire background */
+            background-repeat: no-repeat; /* No repeating */
+        }
+
+        .container {
+            background-color: rgba(255, 255, 255, 0.8); /* Semi-transparent white background */
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1); /* Add box shadow for contrast */
+            text-align: center;
+            max-width: 400px;
+            width: 100%;
+        }
+
+        h2 {
+            margin-bottom: 30px;
+            color: #333;
+        }
+
+        /* Input box styles */
+        .input-box {
+            position: relative;
+            margin-bottom: 30px;
+        }
+
+        .input-box label {
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #666;
+            pointer-events: none;
+            transition: 0.3s ease;
+            padding: 0 10px; /* Add padding to adjust the position of the label */
+        }
+
+        .input-box input[type="text"],
+        .input-box input[type="password"] {
+            width: calc(100% - 50px); /* Adjust width to accommodate the icon */
+            padding: 15px 20px;
+            border: none;
+            border-bottom: 2px solid #ddd;
+            outline: none;
+            font-size: 16px;
+            color: #333;
+            transition: 0.3s ease;
+            background: transparent;
+            padding-left: 40px; /* Adjust padding to leave space for the icon */
+        }
+
+        .input-box input[type="text"]:focus,
+        .input-box input[type="password"]:focus {
+            border-bottom-color: #007bff;
+        }
+
+        /* Adjust the icon size */
+        .input-box label img {
+            width: 20px; /* Adjust the width of the icon */
+            height: 20px; /* Adjust the height of the icon */
+            vertical-align: middle; /* Align the icon vertically */
+        }
+
+        /* Button styles */
+        button {
+            width: 100%;
+            padding: 15px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            color: #fff;
+            background-color: #007bff;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        /* Error message styles */
+        .error-message {
+            color: red;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Admin Login</h2>
+
+        <form action="/admin_login" method="post">
+            <div class="input-box">
+                <label for="username"><img src="/static/username_icon.webp" alt="Username"></label>
+                <input type="text" id="username" name="username" required>
+            </div>
+
+            <div class="input-box">
+                <label for="password"><img src="/static/password_icon.png" alt="Password"></label>
+                <input type="password" id="password" name="password" required>
+            </div>
+
+            <!-- Error message -->
+            {% if error %}
+            <p class="error-message">{{ error }}</p>
+            {% endif %}
+
+            <button type="submit">Login</button>
+        </form>
+    </div>
+</body>
+</html>

@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Profile</title>
+    <style>
+        /* Reset CSS */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Body styles */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            line-height: 1.6;
+        }
+
+        /* Container styles */
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            max-width: 100%;
+            margin: 20px auto;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        /* Side panel styles */
+        .side-panel {
+            width: 100%;
+            background-color: #08eeb8; /* Green color */
+            color: #fff;
+            padding: 20px;
+        }
+
+        .side-panel h2 {
+            margin-top: 0;
+            border-bottom: 1px solid #fff; 
+            padding-bottom: 10px; 
+        }
+
+        .side-panel ul {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .side-panel li {
+            margin-bottom: 10px;
+        }
+
+        .side-panel a {
+            display: block;
+            color: #fff;
+            text-decoration: none;
+            padding: 15px 20px; /* Increased padding */
+            border-radius: 5px;
+            margin-bottom: 5px;
+            background-color: rgb(126, 121, 79); /* Darker green for buttons */
+            transition: background-color 0.3s ease;
+            font-weight: bold; /* Increase font weight */
+            font-size: 18px; /* Increase font size */
+        }
+
+        .side-panel a.highlighted {
+            background-color: coral; /* Lighter green for highlighted buttons */
+        }
+
+        .side-panel a:hover {
+            background-color: #2d9add; /* Darker green on hover */
+        }
+
+        /* Content styles */
+        .content {
+            padding: 20px;
+            width: 100%;
+            max-width: 800px;
+            margin: 20px 0;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            background-color: #fff;
+        }
+
+        .content h2 {
+            color: #007bff;
+            margin-top: 0;
+            margin-bottom: 20px;
+        }
+
+        .content p {
+            margin-bottom: 10px;
+        }
+
+        /* Event registration form styles */
+        .event-registration-form {
+            margin-top: 20px;
+            background-color: #f9f9f9;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .event-registration-form h2 {
+            color: #007bff;
+            margin-top: 0;
+            margin-bottom: 20px;
+        }
+
+        .event-registration-form label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .event-registration-form select, 
+        .event-registration-form input[type="submit"] {
+            padding: 10px 15px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            width: 100%;
+            margin-bottom: 10px;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
+        }
+
+        .event-registration-form input[type="submit"] {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+        }
+
+        .event-registration-form input[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+
+        /* Table styles */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #007bff;
+            color: #fff;
+        }
+
+        /* Media Query for Desktop */
+        @media only screen and (min-width: 768px) {
+            .container {
+                flex-direction: row;
+                align-items: flex-start;
+            }
+
+            .side-panel {
+                width: 300px;
+                padding: 20px;
+            }
+
+            .content {
+                margin-left: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="side-panel">
+            <h2>Menu</h2>
+            <ul>
+                <li><a href="#profile-content" id="profile-btn" class="highlighted">Profile</a></li>
+                <li>
+                    <a href="#register-events-submenu" id="register-events-btn" class="highlighted">Register Events</a>
+                    <div class="sub-menu" id="register-events-submenu">
+                        <a href="#arts-registration-form" id="arts-btn">Arts</a>
+                        <a href="#sports-registration-form" id="sports-btn">Sports</a>
+                    </div>
+                </li>
+                <li>
+                    <a href="#registered-events-content" id="registered-events-btn" class="highlighted">Registered Events</a>
+                    <div class="sub-menu" id="registered-events-submenu">
+                        <a href="#" id="arts-event-btn">Arts Event</a>
+                        <a href="#" id="sports-event-btn">Sports Event</a>
+                    </div>
+                </li>
+                <li><a href="/" class="highlighted">Logout</a></li>
+            </ul>
+        </div>
+        
+
+        <div class="content" id="profile-content">
+            <h2>User Profile</h2>
+            <p><strong>Name:</strong> {{ name }}</p>
+            <p><strong>Register Number:</strong> {{ register_number }}</p>
+            <p><strong>House Name:</strong> {{ house_name }}</p>
+
+            <h2>Available Events</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Category</th>
+                        <th>Venue</th>
+                        <th>Date</th>
+                        <th>Time</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for event in events %}
+                    <tr>
+                        <td>{{ event[0] }}</td>
+                        <td>{{ event[1] }}</td>
+                        <td>{{ event[2] }}</td>
+                        <td>{{ event[3] }}</td>
+                        <td>{{ event[4] }} {{ event[5] }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Arts Event Registration Form -->
+        <div class="event-registration-form" id="arts-registration-form" style="display: none;">
+            <h2>Arts Event Registration</h2>
+            <form action="/register_event" method="post">
+                <input type="hidden" name="user_name" value="{{ name }}">
+                <input type="hidden" name="register_number" value="{{ register_number }}">
+                <input type="hidden" name="house_name" value="{{ house_name }}">
+                <label for="event_name">Event Name:</label>
+                <select name="event_name" id="arts-event-name">
+                    {% for event in events %}
+                    {% if event[1] in ['Music', 'Dance', 'Literary', 'Theater', 'Fine Arts'] %}
+                    <option value="{{ event[0] }}">{{ event[0] }}</option>
+                    {% endif %}
+                    {% endfor %}
+                </select>
+                <br>
+                <input type="submit" value="Register" style="background-color: #007bff; color: #fff; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer;">
+            </form>
+        </div>
+
+        <!-- Sports Event Registration Form -->
+        <div class="event-registration-form" id="sports-registration-form" style="display: none;">
+            <h2>Sports Event Registration</h2>
+            <form action="/register_sports_event" method="post">
+                <input type="hidden" name="user_name" value="{{ name }}">
+                <input type="hidden" name="register_number" value="{{ register_number }}">
+                <input type="hidden" name="house_name" value="{{ house_name }}">
+                <label for="event_name">Event Name:</label>
+                <select name="event_name" id="sports-event-name">
+                    {% for event in events %}
+                    {% if event[1] in ['Solo', 'Group'] %}
+                    <option value="{{ event[0] }}">{{ event[0] }}</option>
+                    {% endif %}
+                    {% endfor %}
+                </select>
+                <br>
+                <label for="event_type">Event Type:</label>
+                <select name="event_type" id="sports-event-type">
+                    <option value="Solo">Solo</option>
+                    <option value="Group">Group</option>
+                </select>
+                <br>
+                <input type="submit" value="Register" style="background-color: #007bff; color: #fff; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer;">
+            </form>
+        </div>
+
+        <!-- Registered Events Table -->
+        <div class="content" id="registered-events-content" style="display: none;">
+            <h2>Registered Events</h2>
+            <table id="registered-events-table">
+                <thead>
+                    <tr>
+                        <th>Event Name</th>
+                        <th>Venue</th>
+                        <th>Date</th>
+                        <th>Time</th>
+                    </tr>
+                </thead>
+                <tbody id="registered-events-body">
+                    <!-- Registered events will be inserted here dynamically -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        // Function to fetch and display registered events
+        function displayRegisteredEvents(eventType) {
+            var xhttp = new XMLHttpRequest();
+            xhttp.onreadystatechange = function() {
+                if (this.readyState == 4 && this.status == 200) {
+                    var events = JSON.parse(this.responseText);
+                    var tableBody = document.getElementById("registered-events-body");
+                    tableBody.innerHTML = ""; // Clear previous content
+
+                    // Populate the table with registered events
+                    events.forEach(function(event) {
+                        var row = "<tr>";
+                        row += "<td>" + event.event_name + "</td>";
+                        row += "<td>" + event.venue + "</td>";
+                        row += "<td>" + event.event_date + "</td>";
+                        row += "<td>" + event.event_time + "</td>";
+                        row += "</tr>";
+                        tableBody.innerHTML += row;
+                    });
+                }
+            };
+            xhttp.open("GET", "/display_registered_events/" + eventType, true);
+            xhttp.send();
+        }
+
+
+        // Add event listeners to menu buttons to scroll to corresponding sections
+        document.getElementById('profile-btn').addEventListener('click', scrollToSection);
+        document.getElementById('register-events-btn').addEventListener('click', scrollToSection);
+        document.getElementById('registered-events-btn').addEventListener('click', scrollToSection);
+        document.getElementById('arts-event-btn').addEventListener('click', scrollToSection);
+        document.getElementById('sports-event-btn').addEventListener('click', scrollToSection);
+
+        // Function to scroll to the corresponding section
+        function scrollToSection(event) {
+            event.preventDefault(); // Prevent default link behavior
+            const targetId = this.getAttribute('href').substring(1); // Get target section ID from href attribute
+            const targetElement = document.getElementById(targetId); // Get target element
+            if (targetElement) {
+                // Calculate offset considering fixed header
+                const offset = targetElement.offsetTop - document.querySelector('.side-panel').offsetHeight;
+                // Scroll to the target section smoothly
+                window.scrollTo({
+                    top: offset,
+                    behavior: 'smooth'
+                });
+            }
+        }
+
+
+        // Event listeners for Arts Event and Sports Event buttons
+        document.getElementById("registered-events-submenu").addEventListener("click", function(event) {
+            if (event.target.id === "arts-event-btn") {
+                displayRegisteredEvents("arts");
+            } else if (event.target.id === "sports-event-btn") {
+                displayRegisteredEvents("sports");
+            }
+        });
+
+        // Event listeners for Arts Event and Sports Event buttons
+        document.getElementById("arts-event-btn").addEventListener("click", function() {
+            displayRegisteredEvents("arts");
+        });
+
+        document.getElementById("sports-event-btn").addEventListener("click", function() {
+            displayRegisteredEvents("sports");
+        });
+
+        // Event listener for toggling the visibility of the profile content
+        document.getElementById("profile-btn").addEventListener("click", function() {
+            var content = document.getElementById("profile-content");
+            content.style.display = (content.style.display === "none") ? "block" : "none";
+        });
+
+        // Event listener for toggling the visibility of the register events submenu
+        document.getElementById("register-events-btn").addEventListener("click", function() {
+            var submenu = document.getElementById("register-events-submenu");
+            submenu.style.display = (submenu.style.display === "none") ? "block" : "none";
+        });
+
+        // Event listener for toggling the visibility of the arts registration form
+        document.getElementById("arts-btn").addEventListener("click", function() {
+            var form = document.getElementById("arts-registration-form");
+            form.style.display = (form.style.display === "none") ? "block" : "none";
+        });
+
+        // Event listener for toggling the visibility of the sports registration form
+        document.getElementById("sports-btn").addEventListener("click", function() {
+            var form = document.getElementById("sports-registration-form");
+            form.style.display = (form.style.display === "none") ? "block" : "none";
+        });
+
+        // Event listener for toggling the visibility of the registered events submenu
+        document.getElementById("registered-events-btn").addEventListener("click", function() {
+            var submenu = document.getElementById("registered-events-content");
+            submenu.style.display = (submenu.style.display === "none") ? "block" : "none";
+        });
+    </script>
+</body>
+</html>
